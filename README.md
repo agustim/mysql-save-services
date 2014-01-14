@@ -5,6 +5,16 @@ Example to save service avahi in table mysql
 ```
 sudo apt-get install mysql-server
 ```
+Install nodejs from sources (from https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager)
+```
+sudo apt-get install python g++ make checkinstall
+mkdir ~/src && cd $_
+wget -N http://nodejs.org/dist/node-latest.tar.gz
+tar xzvf node-latest.tar.gz && cd node-v*
+./configure
+sudo checkinstall -y --install=no --pkgversion 0.10.24  # Replace with current version number.
+sudo dpkg -i node_*
+```
 
 2) Create Database
 
