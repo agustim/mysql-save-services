@@ -1,13 +1,14 @@
 var crypto = require('crypto');
 var mysql = require('mysql');
-var connection = mysql.createConnection(
+/*var connection = mysql.createConnection(
 	{ 
 		host: 'localhost', 
 		user: 'avahi',  
 		password: 'avahipassword', 
 		database: 'avahiservices'
 	}
-);
+);*/
+var connection = mysql.createConnection('mysql://avahi:avahipassword@localhost:3306/avahiservices');
 
 var serviceModel = {};
 
@@ -97,7 +98,7 @@ serviceModel.updateService = function(serviceData, callback)
 	if(connection)
 	{
 		var hash = crypto.createHash('md5').update(
-			serviceData.tipo+";"+serviceData.hostname+";"+serviceData.port
+			serviceData.tipo+";"+serviceData.ip+";"+serviceData.port
 		).digest("hex");
 		var sql = 'UPDATE services SET ' + 
 		'type = ' + connection.escape(serviceData.tipo) + ',' +

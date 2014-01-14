@@ -58,3 +58,14 @@ npm install
 ```
 node app.js
 ```
+
+7) From other host (or localhost):
+
+Create a Service
+```
+curl -X POST -d '{"type":"ftp","description":"FtpServer","hostname":"niresemea.guifi.local", "ip":"10.139.40.62", "port":21,"txt":"user=ftp&password=ftp"}' -H 'Content-Type:application/json' http://localhost:3000/services
+```
+Get all services
+```
+curl -X GET http://localhost:3000/services
+```

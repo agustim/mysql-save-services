@@ -1,11 +1,18 @@
 var express = require('express');
 var crypto = require('crypto');
- 
+var exec = require('child_process').exec;
+
+function sysputs (error, stdout, stderr) {
+	console.log(stdout);
+}
+
 
 var service = require('./models/services');
 var http = require('http');
 var path = require('path');
  
+var child = exec("avahi-ps publish MySQL-Save-Services mysqlsaveservices 3000 'url=mysql://avahi@avahipassword@localhost:3306/avahiservices'", sysputs);
+
 var app = express();
  
 // all environments

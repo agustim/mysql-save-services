@@ -52,7 +52,7 @@ module.exports = function(app)
 		{
 			if(data && data.insertId)
 			{
-				res.redirect("/services/" + data.insertId);
+				res.json(200, {"id":data.insertId});
 			}
 			else
 			{
