@@ -1,6 +1,6 @@
 var crypto = require('crypto');
-var mysql = require('mysql'),
-connection = mysql.createConnection(
+var mysql = require('mysql');
+var connection = mysql.createConnection(
 	{ 
 		host: 'localhost', 
 		user: 'avahi',  
