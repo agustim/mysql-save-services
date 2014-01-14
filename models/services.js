@@ -1,17 +1,14 @@
 var crypto = require('crypto');
 var mysql = require('mysql');
-/*var connection = mysql.createConnection(
-	{ 
-		host: 'localhost', 
-		user: 'avahi',  
-		password: 'avahipassword', 
-		database: 'avahiservices'
-	}
-);*/
-var connection = mysql.createConnection('mysql://avahi:avahipassword@localhost:3306/avahiservices');
+
+var connection ;
 
 var serviceModel = {};
 
+serviceModel.setConnection = function(mysqlurl, callback)
+{
+	connection = mysql.createConnection('mysql://avahi:avahipassword@localhost:3306/avahiservices');
+}
 //obtenir tots els serveis.
 serviceModel.getServices = function(callback)
 {
