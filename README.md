@@ -42,7 +42,8 @@ description varchar(150),
 hostname varchar(150),
 ip varchar(15),
 port varchar(5),
-txt text
+txt text, 
+modified timestamp
 );
 EOF
 ```

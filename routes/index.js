@@ -35,7 +35,6 @@ module.exports = function(app)
 
 	app.post("/services", function(req,res)
 	{
-
 		var ServiceData = {
 			id : null,
 			type : req.body.type,
@@ -64,7 +63,18 @@ module.exports = function(app)
 
 	app.put("/services", function(req,res)
 	{
-		var ServiceData = {id:req.param('id'),username:req.param('username'),email:req.param('email')};
+		var ServiceData = {
+			id:req.param('id'),
+			type:req.param('type'),
+			description:req.param('description'),
+			hostname:req.param('hostname'),
+			ip:req.param('ip'),
+			port:req.param('port'),
+			txt:req.param('txt')
+		};
+		ServiceData['md5num'] = crypto.createHash('md5').update(
+			ServiceData.tipo+";"+ServiceData.hostname+";"+ServiceData.port
+		).digest("hex");
 		ServiceModel.updateService(ServiceData,function(error, data)
 		{
 			if(data && data.msg)

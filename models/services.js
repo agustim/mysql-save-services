@@ -21,6 +21,7 @@ serviceModel.getServices = function(callback)
 			}
 			else
 			{
+				console.log("Get all services.")
 				callback(null, rows);
 			}
 		});
@@ -41,6 +42,7 @@ serviceModel.getService = function(id,callback)
 			}
 			else
 			{
+				console.log("Get iformation from "+id+" service.")
 				callback(null, row);
 			}
 		});
@@ -50,61 +52,62 @@ serviceModel.getService = function(id,callback)
 //afegir servei
 serviceModel.insertService = function(serviceData,callback)
 {
-	if (connection) 
-	{
-		var sqlExists = 'SELECT count(*) as num FROM services WHERE md5num = ' + connection.escape(serviceData.md5num);
-		console.log(sqlExists);
-		connection.query(sqlExists, function(err, row) 
+	if (serviceData.type == "") {
+		console.log("Empty service type.");
+		callback(null,{"msg":"emptyType"});
+	} else {
+		if (connection) 
 		{
-			if(err)
+			var sqlExists = 'SELECT count(*) as num FROM services WHERE md5num = ' + connection.escape(serviceData.md5num);
+			connection.query(sqlExists, function(err, row) 
 			{
-				throw error;
-			}
-			else
-			{
-				console.log(row[0].num);
-				console.log(serviceData);
-				if(row[0].num == 0)
+				if(err)
 				{
-					
-					console.log("Not exist!");
-
-					connection.query('INSERT INTO services SET ?', serviceData, function(error, result) 
-					{
-						if(error)
-						{
-							throw error;
-						}
-						else
-						{
-							callback(null,{"insertId" : result.insertId});
-						}
-					});
-				} else {
-					callback(null,{"msg":"existHash"});
+					throw error;
 				}
-			}
-		});
+				else
+				{
+					if(row[0].num == 0)
+					{
+						console.log("Service don't exist, insert in the table.");
+						connection.query('INSERT INTO services SET ?', serviceData, function(error, result) 
+						{
+							if(error)
+							{
+								throw error;
+							}
+							else
+							{
+								console.log("")
+								callback(null,{"insertId" : result.insertId});
+							}
+						});
+					} else {
+						console.log("This service exist in table, update modified field.");
+						/* update last modification */
+						connection.query('UPDATE services SET modified = sysdate() WHERE md5num=' + connection.escape(serviceData.md5num));
+						callback(null,{"msg":"existHash"});
+					}
+				}
+			});
+		}
 	}
 }
 
 //actualizar
 serviceModel.updateService = function(serviceData, callback)
 {
-	//console.log(serviceData); return;
 	if(connection)
 	{
-		var hash = crypto.createHash('md5').update(
-			serviceData.tipo+";"+serviceData.ip+";"+serviceData.port
-		).digest("hex");
 		var sql = 'UPDATE services SET ' + 
-		'type = ' + connection.escape(serviceData.tipo) + ',' +
+		'type = ' + connection.escape(serviceData.type) + ',' +
 		'description = ' + connection.escape(serviceData.description) + ',' +  
 		'hostname = ' + connection.escape(serviceData.hostname) + ',' +
 		'ip = ' + connection.escape(serviceData.ip) + ',' +
 		'port = ' + connection.escape(serviceData.port) + ',' +
 		'txt = ' + connection.escape(serviceData.txt) + ',' +
-		'md5num = ' + hash +
+		'md5num = ' + connection.escape(serviceData.hash) + ',' +
+		'modified = sysdate() ' +
 		'WHERE id = ' + serviceData.id;
 
 		connection.query(sql, function(error, result) 
