@@ -1,0 +1,32 @@
+extends layout
+ 
+block content
+  .navbar.navbar-inverse.navbar-fixed-top
+    .navbar-inner
+      .container
+        ul.nav
+          li  
+            a(href='/') Services
+  .well.well-sm.span10.offset1#panel
+    h3#title #{title}
+  .well.span10.offset1#usersTable
+    table.table.table-striped
+      thead
+        tr
+          th Desciption
+          th hostname
+          th ip
+          th port
+          th txt
+          th modified
+      tbody
+        if(services)
+          each service in services
+            tr.alert.alert-info
+              td
+                a(href=service.url) #{service.description}
+              td=service.hostname
+              td=service.ip
+              td=service.port
+              td=service.txt
+              td=service.modified

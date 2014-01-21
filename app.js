@@ -19,10 +19,13 @@ var child = exec("avahi-ps publish MySQL-Save-Services mysqlsaveservices 3000", 
 var app = express();
  
 app.set('port', process.env.PORT || 3000);
+app.set('views', path.join(__dirname,'views'));
+app.set('view engine','jade');
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
+app.use(express.static(path.join(__dirname,'public')));
  
 require('./routes')(app);
  

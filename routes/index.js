@@ -1,8 +1,39 @@
 var ServiceModel = require('../models/services');
 var crypto = require('crypto');
 
+split_txt = function(str){
+
+}
+
 module.exports = function(app)
 {
+
+	app.get("/", function (req, res){
+		ServiceModel.getServices(function(error,data){
+			data.forEach(function(e){
+				//Convert TXT in varibles from object.
+				e.txt.split("&").map(function(element){
+					e2 = element.split("=");
+					if (e2.length == 2) {
+						eval("e."+e2[0]+"='"+e2[1]+"'");
+					}
+				});
+				if (e.type == '_ftp._tcp' || e.type == '_nfs._tcp'){
+					if (typeof e.path === 'undefined') e.path="/";
+					//Treure _*._tcp
+					t=(e.type == '_ftp._tcp')?"ftp":"nfs";
+					e.url=t+"://"+e.user+":"+e.password+"@"+e.ip+":"+e.port+e.path;
+					console.log(e.url);
+				}
+			});
+			console.log(data);
+			res.render('services', {
+                title: 'Services in Avahi Discobered.',
+                services : data
+            });
+		});
+	});
+
 	app.get("/services", function(req,res){
 		ServiceModel.getServices(function(error, data)
 		{
