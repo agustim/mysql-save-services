@@ -14,7 +14,7 @@ serviceModel.getServices = function(callback)
 {
 	if (connection) 
 	{
-		connection.query('SELECT * FROM services ORDER BY id', function(error, rows) {
+		connection.query('SELECT * FROM services order by modified DESC', function(error, rows) {
 			if(error)
 			{
 				throw error;

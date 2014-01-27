@@ -23,10 +23,11 @@ module.exports = function(app)
 					//Treure _*._tcp
 					t=(e.type == '_ftp._tcp')?"ftp":"nfs";
 					e.url=t+"://"+e.user+":"+e.password+"@"+e.ip+":"+e.port+e.path;
-					console.log(e.url);
+				}
+				if (e.type == '_mysqlsaveservices._tcp'){
+					e.url="http://"+e.ip+":"+e.port;				
 				}
 			});
-			console.log(data);
 			res.render('services', {
                 title: 'Services in Avahi Discobered.',
                 services : data
